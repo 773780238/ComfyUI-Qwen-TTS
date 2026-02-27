@@ -865,7 +865,10 @@ class VoiceCloneNode:
             sr = 24000  # Default Qwen sr
 
             for i, (seg_text, pause_dur) in enumerate(segments):
-                if not seg_text.strip():
+                # Strip punctuation and whitespace to see if there is actual pronounceable text
+                pronounceable = re.sub(r'[^\w\u4e00-\u9fa5]', '', seg_text)
+                
+                if not pronounceable.strip():
                     if pause_dur > 0:
                         silence_len = int(pause_dur * sr)
                         silence = torch.zeros((1, 1, silence_len))
@@ -1010,7 +1013,10 @@ class CustomVoiceNode:
         sr = 24000  # Default Qwen sr
 
         for i, (seg_text, pause_dur) in enumerate(segments):
-            if not seg_text.strip():
+            # Strip punctuation and whitespace to see if there is actual pronounceable text
+            pronounceable = re.sub(r'[^\w\u4e00-\u9fa5]', '', seg_text)
+            
+            if not pronounceable.strip():
                 if pause_dur > 0:
                     silence_len = int(pause_dur * sr)
                     silence = torch.zeros((1, 1, silence_len))
@@ -1287,7 +1293,8 @@ class DialogueInferenceNode:
 
             for i in range(0, len(parts), 2):
                 segment_text = parts[i].strip()
-                if not segment_text: continue
+                pronounceable = re.sub(r'[^\w\u4e00-\u9fa5]', '', segment_text)
+                if not pronounceable.strip(): continue
 
                 current_segment_pause = 0.0
                 if i + 1 < len(parts):
