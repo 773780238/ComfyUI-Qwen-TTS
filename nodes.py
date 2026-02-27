@@ -169,15 +169,15 @@ def split_text_by_pauses(text: str, config: Dict[str, float]) -> List[Tuple[str,
     question_pause = config.get("question_pause", 0.6)
     hyphen_pause = config.get("hyphen_pause", 0.3)
 
-    # Inject break tags
+    # Inject break tags for both English and Chinese punctuation
     if period_pause > 0:
-        text = re.sub(r'\.(?!\d)', f'. [break={period_pause}]', text)
+        text = re.sub(r'[\.。](?!\d)', f'. [break={period_pause}]', text)
     if comma_pause > 0:
-        text = re.sub(r',(?!\d)', f', [break={comma_pause}]', text)
+        text = re.sub(r'[,，](?!\d)', f', [break={comma_pause}]', text)
     if question_pause > 0:
-        text = re.sub(r'\?(?!\d)', f'? [break={question_pause}]', text)
+        text = re.sub(r'[\?？](?!\d)', f'? [break={question_pause}]', text)
     if hyphen_pause > 0:
-        text = re.sub(r'-(?!\d)', f'- [break={hyphen_pause}]', text)
+        text = re.sub(r'[-—](?!\d)', f'- [break={hyphen_pause}]', text)
 
     # Process explicit break tags
     pause_pattern = r'\[break=([\d\.]+)\]'
