@@ -1,6 +1,6 @@
 torch
 torchaudio
-transformers>=4.57.0
+transformers==4.57.3
 librosa
 soundfile
 accelerate
